@@ -1,4 +1,4 @@
-package org.koenighotze.wiremocktryout;
+package org.koenighotze.wiremocktryout.domain;
 
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
@@ -9,9 +9,10 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
+ * Domain class...just for demo-ing.
+ *
  * @author David Schmitz
  */
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Sample {
     private String publicId;

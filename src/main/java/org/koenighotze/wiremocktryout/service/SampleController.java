@@ -1,4 +1,4 @@
-package org.koenighotze.wiremocktryout;
+package org.koenighotze.wiremocktryout.service;
 
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
@@ -15,12 +15,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.koenighotze.wiremocktryout.domain.Sample;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Simple REST controller that exposes some services that we'll mock and stub
+ * and test using Wiremock.
+ *
  * @author David Schmitz
  */
 @RestController
