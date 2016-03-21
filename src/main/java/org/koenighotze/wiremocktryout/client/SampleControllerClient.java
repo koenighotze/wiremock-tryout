@@ -9,6 +9,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.koenighotze.wiremocktryout.domain.Sample;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,8 @@ import javaslang.control.Try;
  */
 @Component
 public class SampleControllerClient {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SampleControllerClient.class);
+
     private final RestTemplate restTemplate;
 
     @Inject
@@ -35,7 +39,10 @@ public class SampleControllerClient {
     public List<Sample> fetchAllSamples() {
         // @formatter:off
         return Try.of(this::getSamples)
-            .recover(t -> emptyList())
+            .recover(t -> {
+                LOGGER.warn("Cannot handle response!", t);
+                return emptyList();
+            })
             .get();
         // @formatter:on
     }

@@ -33,7 +33,6 @@
     <javaslang.version>2.0.0-RC4</javaslang.version>
   </properties>
 
-
   <build>
     <plugins>
       <plugin>
@@ -76,11 +75,7 @@
       <artifactId>httpclient</artifactId>
       <version>4.5.2</version>
     </dependency>
-    <dependency>
-      <groupId>com.jayway.jsonpath</groupId>
-      <artifactId>json-path</artifactId>
-      <scope>test</scope>
-    </dependency>
+
 
     <dependency>
       <groupId>com.javaslang</groupId>
@@ -94,6 +89,7 @@
 
       <!-- Include everything below here if you have dependency conflicts -->
       <classifier>standalone</classifier>
+      <scope>test</scope>
       <exclusions>
         <exclusion>
           <groupId>org.mortbay.jetty</groupId>
@@ -137,10 +133,18 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
+      <scope>test</scope>
     </dependency>
 
 

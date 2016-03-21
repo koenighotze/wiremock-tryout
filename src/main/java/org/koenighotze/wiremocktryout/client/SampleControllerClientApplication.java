@@ -37,7 +37,7 @@ public class SampleControllerClientApplication {
     public ClientHttpRequestFactory clientHttpRequestFactory() {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
         factory.setReadTimeout(2000);
-        //        factory.setConnectTimeout(2000);
+        factory.setConnectTimeout(500);
         return factory;
     }
 }

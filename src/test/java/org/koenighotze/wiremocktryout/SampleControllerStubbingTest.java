@@ -58,9 +58,7 @@ public class SampleControllerStubbingTest {
         // @formatter:off
         givenThat(get(urlEqualTo("/sample/"))
             .willReturn(
-                aResponse()
-                    .withHeader("Content-Type", "application/json")
-                    .withBody("[{\"publicId\": \"23\", \"data\":\"123\"}]")));
+                RequestUtils.withValidResponse(aResponse())));
         // @formatter:on
 
         List<Sample> samples = sampleControllerClient.fetchAllSamples();

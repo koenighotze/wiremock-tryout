@@ -20,24 +20,21 @@ The client is the actual target for the tests using Wiremock.
 
 ## Wiremock
 
+Wiremock can be used in standalone mode and via unit tests. The following focuses on unit testing.
 
 ### Scenarios
 
 * Stubbing
 ** Handling 5xx codes
 ** Handling 4xx codes
- 
+
 * Faults
 ** Request Timeouts
 ** Socket Timeout
 ** Bad response
- 
-
-
-
 
 ## Bucket list
 
 - [ ] Try out standalone mode
 - [ ] Try record and playback
-- [ ] Using it in unittests
+- [x] Using it in unittests
