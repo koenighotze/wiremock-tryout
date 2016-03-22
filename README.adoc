@@ -7,7 +7,7 @@ It uses http://projects.spring.io/spring-boot/[Spring-Boot] for exposing and con
 ## The server
 
 A simple REST endpoint is implemented in `org.koenighotze.wiremocktryout.service.SampleController`.
-It exposes `Sample`s at `http://localhost:8080/sample/`. Otherwise nothing special is happening of note.
+It exposes `Sample` at `http://localhost:8080/sample/`. Otherwise nothing special is happening of note.
 The server is started by running `org.koenighotze.wiremocktryout.service.SampleApplication`.
 
 ## The client
