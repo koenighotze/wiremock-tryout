@@ -42,7 +42,7 @@ public class SampleController {
     }
 
     @RequestMapping(method = GET, path = "/{id}")
-    public ResponseEntity<Sample> fetchOneSample(@PathVariable String id) {
+    public ResponseEntity<Sample> fetchOneSample(@PathVariable("id") String id) {
         // @formatter:off
         return ofNullable(RANDOM_SAMPLES.get(id))
                 .flatMap(sample -> Optional.of(new ResponseEntity<>(sample, OK)))

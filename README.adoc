@@ -18,7 +18,7 @@ It tries to consume [http://localhost:8080/sample/] via GET.
 
 The client is the actual target for the tests using Wiremock.
 
-A typical Spring MockMvc test is implemented in `org.koenighotze.wiremocktryout.SampleControllerClientIT`.
+A typical Spring MockMvc test is implemented in `org.koenighotze.wiremocktryout.service.SampleControllerSpec`.
 
 ## Wiremock
 
@@ -28,11 +28,11 @@ Wiremock can be used in standalone mode and via unit tests.
 
 #### Stubbing
 
-See `org.koenighotze.wiremocktryout.SampleControllerStubbingTest`.
+See `org.koenighotze.wiremocktryout.client.SampleControllerClientStubbingSpec`.
 
 #### Faults
 
-See `org.koenighotze.wiremocktryout.SampleControllerFailTest`.
+See `org.koenighotze.wiremocktryout.client.SampleControllerClientFailSpec`.
 
 * Request Timeouts
 * Socket Timeout
@@ -43,16 +43,44 @@ See `org.koenighotze.wiremocktryout.SampleControllerFailTest`.
 This is based on running Wiremock as a proxy. This section explains the steps to set it up for recording requests to the
 sample server and serve them back afterwards.
 
-. Start sample server
-. Start Wiremock in proxy mode
-. Record request
-. Stop sample server
-. Start Wiremock in playback mode
-. Start client and watch recorded request being served
+* Start sample server
 
+```bash
+$ mvn spring-boot:run
+```
 
-## Bucket list
+* Start Wiremock in proxy mode
 
-- [ ] Try out standalone mode
-- [ ] Try record and playback
-- [x] Using it in unittests
+```bash
+$ curl -O http://repo1.maven.org/maven2/com/github/tomakehurst/wiremock/1.57/wiremock-1.57-standalone.jar
+$ java -jar wiremock-1.57-standalone.jar \
+        --proxy-all="http://localhost:8080" \
+        --port=8081 \
+        --record-mappings \
+        --root-dir=wiremock-root \
+        --match-headers="Accept,Content-Type" \
+        --verbose
+```
+
+* Record request
+
+```bash
+$ curl -H 'Accept: application/json' http://localhost:8081/sample
+$ curl -H 'Accept: application/json' http://localhost:8081/sample/1
+```
+
+The directory `wiremock-root/mappings/` contains the request mappings, i.e. which request maps to which reply.
+The directory `wiremock-root/__files/` contains the actual response data.
+
+* Stop sample server
+* Start Wiremock in playback mode
+```bash
+$ java -jar wiremock-1.57-standalone.jar
+        --proxy-all="http://localhost:8080" \
+        --port=8080 \
+        --root-dir=wiremock-root \
+        --match-headers="Accept,Content-Type" \
+         --verbose
+
+* Start client and watch recorded request being served
+

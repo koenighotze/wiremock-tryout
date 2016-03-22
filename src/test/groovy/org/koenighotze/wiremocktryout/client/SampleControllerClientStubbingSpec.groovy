@@ -1,0 +1,85 @@
+package org.koenighotze.wiremocktryout.client
+import com.github.tomakehurst.wiremock.junit.WireMockRule
+import org.junit.Rule
+import org.koenighotze.wiremocktryout.domain.Sample
+import org.springframework.boot.test.SpringApplicationConfiguration
+import spock.lang.Specification
+import spock.lang.Timeout
+
+import javax.inject.Inject
+import java.util.concurrent.TimeUnit
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*
+import static org.koenighotze.wiremocktryout.RequestUtils.withValidResponse
+import static org.springframework.http.HttpStatus.NO_CONTENT
+import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE
+
+/**
+ * @author David Schmitz
+ */
+@Timeout(value = 3, unit = TimeUnit.SECONDS)
+@SpringApplicationConfiguration(classes = SampleControllerClientApplication.class)
+class SampleControllerClientStubbingSpec extends Specification {
+    @Inject
+    SampleControllerClient sampleControllerClient
+
+    @Rule
+    WireMockRule wireMockRule = new WireMockRule(8080)
+
+    def "the stub returns an empty list"() {
+        given:
+        givenThat(get(urlEqualTo("/sample/"))
+                .willReturn(
+                aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("[]")))
+
+        when:
+        def result = sampleControllerClient.fetchAllSamples()
+
+        then:
+        result == []
+
+    }
+    def "the stub returns samples"() {
+        given:
+        givenThat(get(urlEqualTo("/sample/"))
+                .willReturn(
+                withValidResponse(aResponse())))
+
+        when:
+        def result = sampleControllerClient.fetchAllSamples()
+
+        then:
+        result != []
+        result[0] == Sample.of("123").setPublicId("23")
+    }
+
+    def "503 results in an empty list"() {
+        given:
+        givenThat(get(urlEqualTo("/sample/"))
+                .willReturn(
+                aResponse()
+                        .withStatus(SERVICE_UNAVAILABLE.value())));
+
+        when:
+        def result = sampleControllerClient.fetchAllSamples()
+
+        then:
+        result == []
+    }
+
+    def "204 results in an empty list"() {
+        given:
+        givenThat(get(urlEqualTo("/sample/"))
+                .willReturn(
+                aResponse()
+                        .withStatus(NO_CONTENT.value())));
+
+        when:
+        def result = sampleControllerClient.fetchAllSamples()
+
+        then:
+        result == []
+    }
+}
