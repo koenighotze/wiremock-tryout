@@ -2,6 +2,8 @@
 
 This repository explores the features of http://wiremock.org[Wiremock].
 
+See slides here: http://www.slideshare.net/koenighotze/resilience-testing-with-wiremock-and-spock
+
 It uses http://projects.spring.io/spring-boot/[Spring-Boot] for exposing and consuming a simple REST service.
 
 ## The server
