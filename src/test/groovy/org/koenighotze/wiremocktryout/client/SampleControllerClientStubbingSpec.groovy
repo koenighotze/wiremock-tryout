@@ -17,30 +17,35 @@ import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE
 /**
  * @author David Schmitz
  */
+
+
 @Timeout(value = 3, unit = TimeUnit.SECONDS)
-@SpringApplicationConfiguration(classes = SampleControllerClientApplication.class)
-class SampleControllerClientStubbingSpec extends Specification {
-    @Inject
-    SampleControllerClient sampleControllerClient
 
-    @Rule
-    WireMockRule wireMockRule = new WireMockRule(8080)
 
-    def "the stub returns an empty list"() {
-        given:
-        givenThat(get(urlEqualTo("/sample/"))
-                .willReturn(
-                aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("[]")))
+    @SpringApplicationConfiguration(classes = SampleControllerClientApplication.class)
+    class SampleControllerClientStubbingSpec extends Specification {
+        @Inject
+        SampleControllerClient sampleControllerClient
 
-        when:
-        def result = sampleControllerClient.fetchAllSamples()
+        @Rule
+        WireMockRule wireMockRule = new WireMockRule(8080)
 
-        then:
-        result == []
+        def "the stub returns an empty list"() {
+            given: "A server that returns an empty JSON array"
+            givenThat(get(urlEqualTo("/sample/"))
+                    .willReturn(
+                        aResponse()
+                            .withHeader("Content-Type", "application/json")
+                            .withBody("[]")))
 
-    }
+            when: "we fetch all samples"
+            def result = sampleControllerClient.fetchAllSamples()
+
+            then: "we expect an empty list"
+            result == []
+        }
+
+
     def "the stub returns samples"() {
         given:
         givenThat(get(urlEqualTo("/sample/"))
@@ -59,7 +64,7 @@ class SampleControllerClientStubbingSpec extends Specification {
         given:
         givenThat(get(urlEqualTo("/sample/"))
                 .willReturn(
-                aResponse()
+                    aResponse()
                         .withStatus(SERVICE_UNAVAILABLE.value())));
 
         when:

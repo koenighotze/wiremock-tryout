@@ -28,6 +28,7 @@ class SampleControllerClientFailSpec extends Specification {
 
     def "the wait time for responses is max 2 seconds"() {
         given: "A server that answers after 4 seconds"
+
         givenThat(get(urlEqualTo("/sample/"))
                 .willReturn(
                 withValidResponse(aResponse())

@@ -15,3 +15,4 @@ target/
 *.iml
 build
 wiremock-root/
+.DS_Store

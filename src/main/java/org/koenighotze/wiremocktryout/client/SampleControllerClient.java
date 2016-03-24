@@ -1,9 +1,13 @@
 package org.koenighotze.wiremocktryout.client;
 
 import static java.util.Collections.emptyList;
+import static javaslang.API.$;
+import static javaslang.API.Case;
+import static javaslang.API.Match;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -12,11 +16,12 @@ import org.koenighotze.wiremocktryout.domain.Sample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import javaslang.control.Match;
+import javaslang.API;
 import javaslang.control.Try;
 
 /**
@@ -51,9 +56,12 @@ public class SampleControllerClient {
         // @formatter:off
         ResponseEntity<List<Sample>> exchange =
             restTemplate.exchange("http://localhost:8080/sample/", GET, null, new ParameterizedTypeReference<List<Sample>>() {});
-        return Match.of(exchange.getStatusCode())
-                    .whenIs(OK).then(exchange.getBody())
-                    .getOrElse(emptyList());
+
+        return Match(exchange.getStatusCode())
+                .of(
+                    Case($(OK), exchange.getBody()),
+                    Case(API.<HttpStatus>$(), Collections.<Sample>emptyList())
+                );
         // @formatter:on
     }
 }
