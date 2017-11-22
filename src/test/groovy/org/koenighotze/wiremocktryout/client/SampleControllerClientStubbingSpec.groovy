@@ -1,8 +1,9 @@
 package org.koenighotze.wiremocktryout.client
+
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import org.junit.Rule
 import org.koenighotze.wiremocktryout.domain.Sample
-import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 import spock.lang.Timeout
 
@@ -20,30 +21,28 @@ import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE
 
 
 @Timeout(value = 3, unit = TimeUnit.SECONDS)
+@SpringBootTest(classes = SampleControllerClientApplication.class)
+class SampleControllerClientStubbingSpec extends Specification {
+    @Inject
+    SampleControllerClient sampleControllerClient
 
+    @Rule
+    WireMockRule wireMockRule = new WireMockRule(8080)
 
-    @SpringApplicationConfiguration(classes = SampleControllerClientApplication.class)
-    class SampleControllerClientStubbingSpec extends Specification {
-        @Inject
-        SampleControllerClient sampleControllerClient
+    def "the stub returns an empty list"() {
+        given: "A server that returns an empty JSON array"
+        givenThat(get(urlEqualTo("/sample/"))
+                .willReturn(
+                aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("[]")))
 
-        @Rule
-        WireMockRule wireMockRule = new WireMockRule(8080)
+        when: "we fetch all samples"
+        def result = sampleControllerClient.fetchAllSamples()
 
-        def "the stub returns an empty list"() {
-            given: "A server that returns an empty JSON array"
-            givenThat(get(urlEqualTo("/sample/"))
-                    .willReturn(
-                        aResponse()
-                            .withHeader("Content-Type", "application/json")
-                            .withBody("[]")))
-
-            when: "we fetch all samples"
-            def result = sampleControllerClient.fetchAllSamples()
-
-            then: "we expect an empty list"
-            result == []
-        }
+        then: "we expect an empty list"
+        result == []
+    }
 
 
     def "the stub returns samples"() {
@@ -64,7 +63,7 @@ import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE
         given:
         givenThat(get(urlEqualTo("/sample/"))
                 .willReturn(
-                    aResponse()
+                aResponse()
                         .withStatus(SERVICE_UNAVAILABLE.value())));
 
         when:

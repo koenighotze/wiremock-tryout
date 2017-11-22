@@ -7,22 +7,16 @@ import static javaslang.API.Match;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.OK;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import javax.inject.*;
 
-import javax.inject.Inject;
-
-import org.koenighotze.wiremocktryout.domain.Sample;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-
-import javaslang.API;
-import javaslang.control.Try;
+import javaslang.control.*;
+import org.koenighotze.wiremocktryout.domain.*;
+import org.slf4j.*;
+import org.springframework.core.*;
+import org.springframework.http.*;
+import org.springframework.stereotype.*;
+import org.springframework.web.client.*;
 
 /**
  * Basic client that uses the REST controller.
@@ -52,6 +46,20 @@ public class SampleControllerClient {
         // @formatter:on
     }
 
+    private List<Sample> getSamplesClassic() {
+        // @formatter:off
+        ResponseEntity<List<Sample>> exchange =
+            restTemplate.exchange("http://localhost:8080/sample/", GET, null, new ParameterizedTypeReference<List<Sample>>() {});
+
+        if (OK.equals(exchange.getStatusCode())) {
+            return exchange.getBody();
+        }
+        else {
+            return emptyList();
+        }
+
+    }
+
     private List<Sample> getSamples() {
         // @formatter:off
         ResponseEntity<List<Sample>> exchange =
@@ -60,7 +68,7 @@ public class SampleControllerClient {
         return Match(exchange.getStatusCode())
                 .of(
                     Case($(OK), exchange.getBody()),
-                    Case(API.<HttpStatus>$(), Collections.<Sample>emptyList())
+                    Case($(), Collections.<Sample>emptyList())
                 );
         // @formatter:on
     }

@@ -2,7 +2,8 @@ package org.koenighotze.wiremocktryout.client
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import org.junit.Rule
-import org.springframework.boot.test.SpringApplicationConfiguration
+import org.koenighotze.wiremocktryout.service.SampleApplication
+import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 import spock.lang.Timeout
 
@@ -18,7 +19,7 @@ import static org.koenighotze.wiremocktryout.RequestUtils.withValidResponse
  */
 
 @Timeout(value = 3, unit = SECONDS)
-@SpringApplicationConfiguration(classes = SampleControllerClientApplication.class)
+@SpringBootTest(classes = [ SampleControllerClientApplication.class, SampleApplication.class ])
 class SampleControllerClientFailSpec extends Specification {
     @Inject
     SampleControllerClient sampleControllerClient

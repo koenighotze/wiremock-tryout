@@ -3,17 +3,17 @@ package org.koenighotze.wiremocktryout.client
 import org.koenighotze.wiremocktryout.service.SampleApplication
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringApplication
-import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 
 /**
  * @author David Schmitz
  */
-@SpringApplicationConfiguration(classes = SampleControllerClientApplication.class)
+@SpringBootTest(classes = SampleControllerClientApplication.class)
 class SampleControllerClientSpec extends Specification {
 
     @Autowired
-    def SampleControllerClient sampleControllerClient
+    SampleControllerClient sampleControllerClient
 
     def "The Samples can be fetched using REST"() {
         setup: "a running application"
