@@ -14,12 +14,8 @@ import static com.github.tomakehurst.wiremock.http.Fault.MALFORMED_RESPONSE_CHUN
 import static java.util.concurrent.TimeUnit.SECONDS
 import static org.koenighotze.wiremocktryout.RequestUtils.withValidResponse
 
-/**
- * @author David Schmitz
- */
-
 @Timeout(value = 3, unit = SECONDS)
-@SpringBootTest(classes = [ SampleControllerClientApplication.class, SampleApplication.class ])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = [ SampleControllerClientApplication.class, SampleApplication.class ])
 class SampleControllerClientFailSpec extends Specification {
     @Inject
     SampleControllerClient sampleControllerClient
@@ -42,7 +38,7 @@ class SampleControllerClientFailSpec extends Specification {
         response == []
     }
 
-    def "a conntect timeout must fail fast"() {
+    def "a connect timeout must fail fast"() {
         given: "A server that takes to long to connect"
         addRequestProcessingDelay(2000)
         givenThat(get(urlEqualTo("/sample/"))

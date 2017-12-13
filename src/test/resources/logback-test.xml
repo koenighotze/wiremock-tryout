@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-  <property name="LOG_FILE" value="${user.home}/tmp/blamer-test.log"/>
+  <property name="LOG_FILE" value="${user.home}/tmp/wiremock-sample-test.log"/>
   <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
 
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -9,16 +9,6 @@
       <level>WARN</level>
     </filter>
 
-    <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>
-        %date{ISO8601} %-5level %logger{36} - %msg%n
-      </Pattern>
-    </layout>
-  </appender>
-
-  <appender name="SQL_FILE" class="ch.qos.logback.core.FileAppender">
-    <file>${user.home}/tmp/blamer-sql-test.log</file>
-    <append>true</append>
     <layout class="ch.qos.logback.classic.PatternLayout">
       <Pattern>
         %date{ISO8601} %-5level %logger{36} - %msg%n
@@ -34,10 +24,6 @@
   <logger name="org.springframework" level="info">
   </logger>
 
-  <logger name="com.koenighotze" level="debug">
-  </logger>
-
-  <logger name="org.hibernate" level="debug" additivity="false">
-    <appender-ref ref="SQL_FILE"/>
+  <logger name="org.koenighotze" level="debug">
   </logger>
 </configuration>

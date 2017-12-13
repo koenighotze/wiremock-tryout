@@ -1,16 +1,16 @@
 package org.koenighotze.wiremocktryout.client;
 
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
 import static java.util.Collections.emptyList;
-import static javaslang.API.$;
-import static javaslang.API.Case;
-import static javaslang.API.Match;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.util.*;
 import javax.inject.*;
 
-import javaslang.control.*;
+import io.vavr.control.*;
 import org.koenighotze.wiremocktryout.domain.*;
 import org.slf4j.*;
 import org.springframework.core.*;
@@ -29,10 +29,12 @@ public class SampleControllerClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(SampleControllerClient.class);
 
     private final RestTemplate restTemplate;
+    private final String baseUrl;
 
     @Inject
     public SampleControllerClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+        this.baseUrl = "http://localhost:9090";
     }
 
     public List<Sample> fetchAllSamples() {
@@ -49,7 +51,7 @@ public class SampleControllerClient {
     private List<Sample> getSamplesClassic() {
         // @formatter:off
         ResponseEntity<List<Sample>> exchange =
-            restTemplate.exchange("http://localhost:8080/sample/", GET, null, new ParameterizedTypeReference<List<Sample>>() {});
+            restTemplate.exchange(baseUrl + "/sample/", GET, null, new ParameterizedTypeReference<List<Sample>>() {});
 
         if (OK.equals(exchange.getStatusCode())) {
             return exchange.getBody();
@@ -63,7 +65,7 @@ public class SampleControllerClient {
     private List<Sample> getSamples() {
         // @formatter:off
         ResponseEntity<List<Sample>> exchange =
-            restTemplate.exchange("http://localhost:8080/sample/", GET, null, new ParameterizedTypeReference<List<Sample>>() {});
+            restTemplate.exchange(baseUrl + "/sample/", GET, null, new ParameterizedTypeReference<List<Sample>>() {});
 
         return Match(exchange.getStatusCode())
                 .of(

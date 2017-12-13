@@ -22,8 +22,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @Rollback
 class SampleControllerSpec extends Specification {
     @Autowired
-    def WebApplicationContext webApplicationContext
-    def MockMvc mockMvc
+    WebApplicationContext webApplicationContext
+    MockMvc mockMvc
 
     def setup() {
         mockMvc = webAppContextSetup(webApplicationContext).build()
@@ -37,18 +37,18 @@ class SampleControllerSpec extends Specification {
 
         then: "we expect a successful JSON response"
         perform.andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8));
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
     }
 
     def "The list of samples can be fetched via GET"() {
         given: "A GET request to the controller URL"
-        def perform = mockMvc.perform(get("/sample/"));
+        def perform = mockMvc.perform(get("/sample/"))
 
         when: "We read the returned JSON data"
 
         then: "We expect a list of 11 elements"
         perform.andExpect(status().isOk())
                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-               .andExpect(jsonPath('$', hasSize(11)));
+               .andExpect(jsonPath('$', hasSize(11)))
     }
 }

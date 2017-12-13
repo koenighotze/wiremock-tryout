@@ -3,7 +3,9 @@ package org.koenighotze.wiremocktryout.client
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import org.junit.Rule
 import org.koenighotze.wiremocktryout.domain.Sample
+import org.koenighotze.wiremocktryout.service.SampleApplication
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import spock.lang.Specification
 import spock.lang.Timeout
 
@@ -21,13 +23,13 @@ import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE
 
 
 @Timeout(value = 3, unit = TimeUnit.SECONDS)
-@SpringBootTest(classes = SampleControllerClientApplication.class)
+@SpringBootTest(webEnvironment = WebEnvironment.NONE, classes = [ SampleControllerClientApplication.class, SampleApplication.class ])
 class SampleControllerClientStubbingSpec extends Specification {
     @Inject
     SampleControllerClient sampleControllerClient
 
     @Rule
-    WireMockRule wireMockRule = new WireMockRule(8080)
+    WireMockRule wireMockRule = new WireMockRule(9090)
 
     def "the stub returns an empty list"() {
         given: "A server that returns an empty JSON array"
@@ -64,7 +66,7 @@ class SampleControllerClientStubbingSpec extends Specification {
         givenThat(get(urlEqualTo("/sample/"))
                 .willReturn(
                 aResponse()
-                        .withStatus(SERVICE_UNAVAILABLE.value())));
+                        .withStatus(SERVICE_UNAVAILABLE.value())))
 
         when:
         def result = sampleControllerClient.fetchAllSamples()
@@ -78,7 +80,7 @@ class SampleControllerClientStubbingSpec extends Specification {
         givenThat(get(urlEqualTo("/sample/"))
                 .willReturn(
                 aResponse()
-                        .withStatus(NO_CONTENT.value())));
+                        .withStatus(NO_CONTENT.value())))
 
         when:
         def result = sampleControllerClient.fetchAllSamples()

@@ -29,8 +29,6 @@ public class SampleControllerClientCommandLineRunner implements CommandLineRunne
      */
     @Override
     public void run(String... args) {
-        sampleControllerClient.fetchAllSamples().forEach(sample -> {
-            out.println("Found sample: " + sample);
-        });
+        sampleControllerClient.fetchAllSamples().forEach(sample -> out.println("Found sample: " + sample));
     }
 }

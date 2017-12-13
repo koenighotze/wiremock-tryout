@@ -2,14 +2,14 @@ package org.koenighotze.wiremocktryout.client
 
 import org.koenighotze.wiremocktryout.service.SampleApplication
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.annotation.DirtiesContext
 import spock.lang.Specification
 
-/**
- * @author David Schmitz
- */
-@SpringBootTest(classes = SampleControllerClientApplication.class)
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT
+
+@SpringBootTest(webEnvironment = DEFINED_PORT, classes = [SampleControllerClientApplication.class, SampleApplication.class])
+@DirtiesContext
 class SampleControllerClientSpec extends Specification {
 
     @Autowired
@@ -17,7 +17,6 @@ class SampleControllerClientSpec extends Specification {
 
     def "The Samples can be fetched using REST"() {
         setup: "a running application"
-        def configurableApplicationContext = new SpringApplication(SampleApplication.class).run();
 
         when: "we fetch the samples"
         def result = sampleControllerClient.fetchAllSamples()
@@ -25,8 +24,5 @@ class SampleControllerClientSpec extends Specification {
         then: "we receive a non empty list"
         result != null
         result.size() > 0
-
-        cleanup:
-        configurableApplicationContext.close();
     }
 }
